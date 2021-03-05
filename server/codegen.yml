@@ -1,0 +1,24 @@
+schema:
+  - ./src/schema/types.ts
+  - ./src/schema/**/!(index.ts)*.ts
+  - |
+    scalar Upload
+generates:
+  ./src/type.ts:
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+    plugins:
+      - typescript
+      - typescript-resolvers
+    config:
+      # This is needed for apollo
+      useIndexSignature: true
+      maybeValue: T | undefined
+      contextType: ./src/@types/context#GQLContext
+      mappers:
+        Kullanici: ./@types/mappers#KullaniciMapper
+        Site: ./@types/mappers#SiteMapper
+        BBolum: ./@types/mappers#BBolumMapper
+        SiteBlok: ./@types/mappers#SiteBlokMapper
+
