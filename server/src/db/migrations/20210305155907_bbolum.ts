@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
     })
 
     .createTable('bbolum', (table) => {
+      table.increments('id').primary();
       table
         .integer('siteId')
         .notNullable()
@@ -21,7 +22,7 @@ export async function up(knex: Knex): Promise<void> {
         .inTable('site_blok')
         .onDelete('SET NULL');
       table.specificType('kat', 'smallint');
-      table.specificType('no', 'smallint');
+      table.string('no',3);
       table.decimal('aidat', 10, 2);
       table
         .integer('tipId')
@@ -37,6 +38,6 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   return knex.schema
-    .dropTableIfExists('bbolum_tip')
-    .dropTableIfExists('bbolum');
+    .dropTableIfExists('bbolum')
+    .dropTableIfExists('bbolum_tip');
 }

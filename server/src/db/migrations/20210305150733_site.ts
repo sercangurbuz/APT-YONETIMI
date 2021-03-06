@@ -1,23 +1,22 @@
 import * as Knex from 'knex';
+import { OgrenimDurumu } from '../enums';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema
     .createTable('lokasyon', (table) => {
       table.increments('id').primary();
       table.string('lokasyonAd', 255).notNullable();
-      table
-        .enum('tip', ['ULKE', 'IL', 'ILCE', 'MAHALLE', 'SOKAK'], {
-          enumName: 'LokasyonType',
-          useNative: true,
-        })
-        .notNullable();
+      table.specificType('tip', 'smallint').notNullable();
       table
         .integer('ustLokasyonId')
         .references('id')
         .inTable('lokasyon')
         .onDelete('CASCADE');
     })
-
+    .raw(
+      `ALTER TABLE lokasyon    
+       ADD CONSTRAINT cc_lokasyon_tip CHECK (tip IN (${OgrenimDurumu.Ilkokul}, ${OgrenimDurumu.Lise},${OgrenimDurumu.OnLisans},${OgrenimDurumu.Lisans},${OgrenimDurumu.YuksekLisans}));`,
+    )
     .createTable('site', (table) => {
       table.increments('id').primary();
       table.string('siteAdi', 255).notNullable();
@@ -45,8 +44,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema
-    .dropTableIfExists('lokasyon')
-    .raw('DROP TYPE "LokasyonType"')
-    .dropTableIfExists('site');
+  return knex.schema.dropTableIfExists('site').dropTableIfExists('lokasyon');
 }

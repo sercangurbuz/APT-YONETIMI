@@ -1,30 +1,26 @@
 import BaseModel from '../../db/BaseModel';
-import { DagitimTipi, HareketTipi, HizmetTipi } from '../enums';
-import HizmetGrup from './hizmet_grup.model';
+import Hizmet from './hizmet.model';
 
 /**
- * Hizmet model
+ * HizmetGrup model
  */
-export default class Hizmet extends BaseModel {
+export default class HizmetGrup extends BaseModel {
   /* -------------------------------------------------------------------------- */
   /*                                   Fields                                   */
   /* -------------------------------------------------------------------------- */
 
   //#region Fields
-  hizmetAdi: string;
-  tip: HizmetTipi;
-  grupId: number;
-  dagitimTipi: DagitimTipi;
-  acilisTarihi: Date;
-  acilisBakiyesi: number;
-  hareketTipi: HareketTipi;
+  grupAdi: string;
   //#endregion
 
   //#region Navigational properties
-  hizmetGrup: HizmetGrup;
+  /**
+   * Hizmet grubuna ait hizmetler
+   */
+  hizmetler: Hizmet[];
   //#endregion
 
-  static tableName = 'hizmet';
+  static tableName = 'hizmet_grup';
 
   /* -------------------------------------------------------------------------- */
   /*                              Validation schema                             */
@@ -32,16 +28,11 @@ export default class Hizmet extends BaseModel {
 
   static jsonSchema = {
     type: 'object',
-    required: ['id', 'tipId'],
+    required: ['id', 'grupAdi'],
 
     properties: {
       id: { type: 'integer' },
-      tip: { type: 'string', minLength: 1, maxLength: 10 },
-      grupId: { type: 'integer' },
-      dagitimTipi: { type: 'string', minLength: 1, maxLength: 6 },
-      acilisTarihi: { type: 'date-time' },
-      acilisBakiyesi: { type: 'number' },
-      hareketTipi: { type: 'string', minLength: 1, maxLength: 1 },
+      grupAdi: { type: 'string', minLenght: 1, maxLenght: 255 },
     },
   };
 
@@ -50,13 +41,13 @@ export default class Hizmet extends BaseModel {
   /* -------------------------------------------------------------------------- */
 
   static relationMappings = () => ({
-    hizmetGrup: {
-      relation: BaseModel.BelongsToOneRelation,
+    hizmetler: {
+      relation: BaseModel.HasManyRelation,
 
-      modelClass: HizmetGrup,
+      modelClass: Hizmet,
       join: {
-        from: 'hizmet.grupId',
-        to: 'hizmet_grup.id',
+        from: 'hizmet_grup.id',
+        to: 'hizmet.grupId',
       },
     },
   });

@@ -1,6 +1,6 @@
 import BaseModel from '../../db/BaseModel';
 
-export type LokasyonTipi = 'ulke' | 'il' | 'ilce' | 'mahalle' | 'sokak';
+
 
 /**
  * Lokasyon model

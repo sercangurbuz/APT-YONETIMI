@@ -1,4 +1,5 @@
 import BaseModel from '../BaseModel';
+import { Dil } from '../enums';
 import Site from './site.model';
 
 /**
@@ -12,7 +13,7 @@ export default class Kullanici extends BaseModel {
   //#region Fields
   adSoyad: string;
   cepTel: string;
-  dil: string;
+  dil: Dil;
   ePosta: string;
   //#endregion
 
