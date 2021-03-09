@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { OgrenimDurumu } from '../enums';
+import { LokasyonTipi } from '../enums';
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema
@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
     })
     .raw(
       `ALTER TABLE lokasyon    
-       ADD CONSTRAINT cc_lokasyon_tip CHECK (tip IN (${OgrenimDurumu.Ilkokul}, ${OgrenimDurumu.Lise},${OgrenimDurumu.OnLisans},${OgrenimDurumu.Lisans},${OgrenimDurumu.YuksekLisans}));`,
+       ADD CONSTRAINT cc_lokasyon_tip CHECK (tip IN (${LokasyonTipi.Ulke},${LokasyonTipi.Il},${LokasyonTipi.Ilce},${LokasyonTipi.Mahalle},${LokasyonTipi.Sokak}));`,
     )
     .createTable('site', (table) => {
       table.increments('id').primary();
@@ -40,9 +40,11 @@ export async function up(knex: Knex): Promise<void> {
         .references('id')
         .inTable('kullanici');
       table.string('durum', 1);
+      table.boolean('aktif').defaultTo(true);
     });
 }
 
 export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTableIfExists('site').dropTableIfExists('lokasyon');
+  ('');
 }

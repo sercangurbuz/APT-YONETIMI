@@ -55,3 +55,23 @@ export enum LokasyonTipi {
   Mahalle,
   Sokak,
 }
+
+export enum GecikmeTipi {
+  Gunluk = 'G',
+  Aylık = 'A',
+}
+
+export enum ThsTipi {
+  Otomatik = 'O',
+  BorclandirmaTuruneGore = 'B',
+  EvrakSecerek = 'E',
+}
+
+export enum FaturaTipi {
+  MasrafFaturası = 1,
+  OdemeMakbuzu,
+  MasrafFisi,
+  GelirFaturasi,
+  TahsilatMakbuzu,
+  GelirFisi,
+}

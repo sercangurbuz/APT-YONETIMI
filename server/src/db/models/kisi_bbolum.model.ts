@@ -38,6 +38,7 @@ export default class KisiBBolum extends BaseModel {
       kisiTipi: { type: 'string' },
       girisTarihi: { type: 'date' },
       cikisTarihi: { type: 'date' },
+      hissePayi: { type: 'integer' },
     },
   };
 }

@@ -33,6 +33,7 @@ export async function up(knex: Knex): Promise<void> {
       table.specificType('brutM2', 'smallint');
       table.specificType('netM2', 'smallint');
       table.specificType('arsaPayi', 'smallint');
+      table.boolean('aktif').defaultTo(true);
     });
 }
 

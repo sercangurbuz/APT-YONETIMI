@@ -20,6 +20,7 @@ export async function up(knex: Knex): Promise<void> {
       table.dateTime('acilisTarihi');
       table.decimal('acilisBakiyesi', 10, 2);
       table.string('hareketTipi', 1);
+      table.boolean('aktif').defaultTo(true);
     })
     .raw(
       `ALTER TABLE hizmet 

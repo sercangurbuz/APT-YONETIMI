@@ -1,8 +1,7 @@
 import BaseModel from '../../db/BaseModel';
-import { Cinsiyet, OgrenimDurumu } from '../enums';
+import { Cinsiyet, Dil, OgrenimDurumu } from '../enums';
 import BBolum from './bbolum.model';
 import KisiBBolum from './kisi_bbolum.model';
-import { Dil } from './kullanici.model';
 import Site from './site.model';
 
 /**
@@ -60,7 +59,7 @@ export default class Kisi extends BaseModel {
       adres: { type: 'string', minLenght: 1, maxLenght: 500 },
       aracPlaka: { type: 'string', minLenght: 1, maxLenght: 15 },
       meslek: { type: 'string', minLenght: 1, maxLenght: 255 },
-      ogrenimDurumu: { type: 'string' },
+      ogrenimDurumu: { type: 'integer' },
       dil: { type: 'string', minLenght: 2, maxLenght: 2 },
       cinsiyet: { type: 'string', minLenght: 1, maxLenght: 1 },
     },

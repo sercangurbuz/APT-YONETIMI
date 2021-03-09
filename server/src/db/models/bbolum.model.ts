@@ -1,5 +1,7 @@
 import BaseModel from '../BaseModel';
 import BBolumTip from './bbolum_tip.model';
+import Kisi from './kisi.model';
+import KisiBBolum from './kisi_bbolum.model';
 import Kullanici from './kullanici.model';
 import Site from './site.model';
 import SiteBlok from './siteblok.model';
@@ -37,6 +39,10 @@ export default class BBolum extends BaseModel {
    * Bagimsiz bolum tip modeli
    */
   bbolumTip: BBolumTip;
+  /**
+   * Bolume ait kişiler
+   */
+  kisiler: Kisi[];
   //#endregion
 
   static tableName = 'bbolum';
@@ -95,6 +101,21 @@ export default class BBolum extends BaseModel {
       join: {
         from: 'bbolum.tipId',
         to: 'bbolum_tip.id',
+      },
+    },
+
+    kisiler: {
+      relation: BaseModel.ManyToManyRelation,
+
+      modelClass: Kisi,
+      join: {
+        from: 'bbolum.id',
+        to: 'kisi.id',
+        through: {
+          from: 'kisi_bbolum.bbolumId',
+          to: 'kisi_bbolum.kisiId',
+          modelClass: KisiBBolum,
+        },
       },
     },
   });
