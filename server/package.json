@@ -8,6 +8,8 @@
     "publish:schema": "apollo service:push --endpoint=http://localhost:4000/graphql",
     "gql:generate": "graphql-codegen",
     "migrate:make": "knex migrate:make",
+    "seed:make": "knex seed:make",
+    "seed:run": "knex seed:run",
     "migrate:rollback": "knex migrate:rollback",
     "migrate:latest": "knex migrate:latest"
   },

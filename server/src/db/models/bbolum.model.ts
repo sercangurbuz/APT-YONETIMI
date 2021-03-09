@@ -19,11 +19,11 @@ export default class BBolum extends BaseModel {
   blokId: number;
   kat: number;
   no: string;
-  aidat: number;
-  tipId: number;
-  brutM2: number;
-  netM2: number;
-  arsaPayi: number;
+  aidat?: number;
+  tipId?: number;
+  brutM2?: number;
+  netM2?: number;
+  arsaPayi?: number;
   //#endregion
 
   //#region Navigational properties

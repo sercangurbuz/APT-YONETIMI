@@ -21,7 +21,7 @@ export default class Kullanici extends BaseModel {
   /**
    * Kullanıcıya ait site'ler
    */
-  siteler: Site[];
+  siteler?: Site[];
   //#endregion
 
   static tableName = 'kullanici';

@@ -1,6 +1,7 @@
 import BaseModel from '../../db/BaseModel';
 import { DagitimTipi, HareketTipi, HizmetTipi } from '../enums';
 import HizmetGrup from './hizmet_grup.model';
+import Site from './site.model';
 
 /**
  * Hizmet model
@@ -13,6 +14,7 @@ export default class Hizmet extends BaseModel {
   //#region Fields
   hizmetAdi: string;
   tip: HizmetTipi;
+  siteId: number;
   grupId: number;
   dagitimTipi: DagitimTipi;
   acilisTarihi: Date;
@@ -22,6 +24,7 @@ export default class Hizmet extends BaseModel {
 
   //#region Navigational properties
   hizmetGrup: HizmetGrup;
+  site: Site;
   //#endregion
 
   static tableName = 'hizmet';
@@ -32,12 +35,13 @@ export default class Hizmet extends BaseModel {
 
   static jsonSchema = {
     type: 'object',
-    required: ['id', 'tipId'],
+    required: ['id', 'tipId', 'siteId'],
 
     properties: {
       id: { type: 'integer' },
       tip: { type: 'string', minLength: 1, maxLength: 10 },
       grupId: { type: 'integer' },
+      siteId: { type: 'integer' },
       dagitimTipi: { type: 'string', minLength: 1, maxLength: 6 },
       acilisTarihi: { type: 'date-time' },
       acilisBakiyesi: { type: 'number' },
@@ -50,6 +54,16 @@ export default class Hizmet extends BaseModel {
   /* -------------------------------------------------------------------------- */
 
   static relationMappings = () => ({
+    site: {
+      relation: BaseModel.BelongsToOneRelation,
+
+      modelClass: Site,
+      join: {
+        from: 'hizmet.siteId',
+        to: 'site.id',
+      },
+    },
+
     hizmetGrup: {
       relation: BaseModel.BelongsToOneRelation,
 

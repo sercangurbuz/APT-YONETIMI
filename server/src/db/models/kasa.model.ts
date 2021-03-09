@@ -1,4 +1,5 @@
 import BaseModel from '../../db/BaseModel';
+import Site from './site.model';
 
 /**
  * Kasa model
@@ -11,8 +12,9 @@ export default class Kasa extends BaseModel {
   //#region Fields
   ad: string;
   acilisTarihi?: Date;
+  siteId: number;
   acilisBakiyesi?: number;
-  aktif: boolean;
+  aktif?: boolean;
   bankaAd?: string;
   hesapAd?: string;
   subeKodu?: string;
@@ -24,6 +26,10 @@ export default class Kasa extends BaseModel {
   //#endregion
 
   //#region Navigational properties
+  /**
+   * Hangi siteye ait oldugu bilgisi
+   */
+  site: Site;
   //#endregion
 
   static tableName = 'kasa';
@@ -34,7 +40,7 @@ export default class Kasa extends BaseModel {
 
   static jsonSchema = {
     type: 'object',
-    required: ['id', 'ad', 'aktif', 'entegrasyon'],
+    required: ['id', 'ad', 'aktif', 'entegrasyon', 'siteId'],
 
     properties: {
       id: { type: 'integer' },
@@ -42,11 +48,12 @@ export default class Kasa extends BaseModel {
       acilisTarihi: { type: 'date' },
       acilisBakiyesi: { type: 'number' },
       aktif: { type: 'boolean' },
+      siteId: { type: 'integer' },
       bankaAd: { type: 'string', maxLenght: 50 },
       hesapAd: { type: 'string', maxLenght: 50 },
       subeKodu: { type: 'string', maxLenght: 25 },
       hesapNo: { type: 'string', maxLenght: 25 },
-      iban: { type: 'string', maxLenght: 50 },
+      iban: { type: 'string', maxLenght: 26 },
       entegrasyon: { type: 'boolean' },
       entKullAdi: { type: 'string', maxLenght: 255 },
       entSifre: { type: 'string', maxLenght: 500 },
@@ -57,16 +64,15 @@ export default class Kasa extends BaseModel {
   /*                                  Relations                                 */
   /* -------------------------------------------------------------------------- */
 
-  /* static relationMappings = () => ({
- : {
-   relation: BaseModel.HasManyRelation,
+  static relationMappings = () => ({
+    site: {
+      relation: BaseModel.BelongsToOneRelation,
 
-   modelClass: ,
-   join: {
-     from: '.id',
-     to: 'Kasa.',
-   },
- },
-
-}); */
+      modelClass: Site,
+      join: {
+        from: 'kasa.siteId',
+        to: 'site.id',
+      },
+    },
+  });
 }

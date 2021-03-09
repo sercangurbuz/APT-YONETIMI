@@ -34,5 +34,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTableIfExists('ths').dropTableIfExists('thk_ths');
+  return knex.schema.dropTableIfExists('thk_ths').dropTableIfExists('ths');
 }

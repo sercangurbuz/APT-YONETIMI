@@ -1,6 +1,7 @@
 import BaseModel from '../../db/BaseModel';
 import { HareketTipi } from '../enums';
 import Fatura from './fatura.model';
+import Site from './site.model';
 
 /**
  * Firma model
@@ -15,6 +16,7 @@ export default class Firma extends BaseModel {
   verNoTcKimlik?: string;
   verDairesi?: string;
   isTel?: string;
+  siteId: number;
   cepTel?: string;
   iban?: string;
   hesapAd?: string;
@@ -32,6 +34,10 @@ export default class Firma extends BaseModel {
    * Firmaya ait faturalar
    */
   faturalar?: Fatura[];
+  /**
+   * Hangi siteye ait oldugu bilgisi
+   */
+  site: Site;
   //#endregion
 
   static tableName = 'firma';
@@ -51,7 +57,7 @@ export default class Firma extends BaseModel {
       verDairesi: { type: 'string', maxLenght: 255 },
       isTel: { type: 'string', maxLenght: 25 },
       cepTel: { type: 'string', maxLenght: 25 },
-      iban: { type: 'string', maxLenght: 35 },
+      iban: { type: 'string', maxLenght: 26 },
       hesapAd: { type: 'string', maxLenght: 255 },
       ePosta: { type: 'string', maxLenght: 255 },
       adres: { type: 'string', maxLenght: 500 },
@@ -67,6 +73,16 @@ export default class Firma extends BaseModel {
   /* -------------------------------------------------------------------------- */
 
   static relationMappings = () => ({
+    site: {
+      relation: BaseModel.BelongsToOneRelation,
+
+      modelClass: Site,
+      join: {
+        from: 'firma.siteId',
+        to: 'site.id',
+      },
+    },
+
     faturalar: {
       relation: BaseModel.HasManyRelation,
 

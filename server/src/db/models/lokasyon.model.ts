@@ -1,4 +1,5 @@
 import BaseModel from '../../db/BaseModel';
+import { LokasyonTipi } from '../enums';
 
 
 
@@ -13,7 +14,7 @@ export default class Lokasyon extends BaseModel {
   //#region Fields
   lokasyonAd: string;
   tip: LokasyonTipi;
-  ustLokasyonId: number;
+  ustLokasyonId?: number;
   //#endregion
 
   //#region Navigational properties

@@ -34,8 +34,8 @@ export async function up(knex: Knex): Promise<void> {
 
     .createTable('kisi_bbolum', (table) => {
       table.increments('id').primary();
-      table.integer('kisiId').notNullable().references('id').inTable('kisi');
-      table.integer('siteId').notNullable().references('id').inTable('site');
+      table.integer('kisiId').notNullable().references('id').inTable('kisi').onDelete("CASCADE");
+      table.integer('bbolumId').notNullable().references('id').inTable('bbolum');
       table.string('kisiTipi').notNullable();
       table.date('girisTarihi').notNullable();
       table.date('cikisTarihi');

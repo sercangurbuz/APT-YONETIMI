@@ -20,10 +20,10 @@ export default class Site extends BaseModel {
   bBolumSayisi: number;
   ilId: number;
   ilceId: number;
-  adres: string;
-  postaKodu: string;
-  telNo: string;
-  ePosta: string;
+  adres?: string;
+  postaKodu?: string;
+  telNo?: string;
+  ePosta?: string;
   toplamArsaPayi: number;
   kullaniciId: number;
   durum: string;

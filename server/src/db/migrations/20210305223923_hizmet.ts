@@ -5,16 +5,18 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema
     .createTable('hizmet_grup', (table) => {
       table.increments('id').primary();
-      table.string('grupAdi', 255).notNullable();
+      table.string('grupAdi', 255).notNullable().unique();
+      table.integer('siteId').notNullable().references('id').inTable('site');
     })
     .createTable('hizmet', (table) => {
       table.increments('id').primary();
-      table.string('hizmetAdi', 255).notNullable();
+      table.string('hizmetAdi', 255).notNullable().unique();
       table
         .integer('grupId')
         .references('id')
         .inTable('hizmet_grup')
         .onDelete('SET NULL');
+      table.integer('siteId').notNullable().references('id').inTable('site');
       table.specificType('tip', 'smallint').notNullable();
       table.string('dagitimTipi', 1);
       table.dateTime('acilisTarihi');

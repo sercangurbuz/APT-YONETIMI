@@ -15,15 +15,15 @@ export default class Kisi extends BaseModel {
   //#region Fields
   siteId: number;
   adSoyad: string;
-  tcKimlikVergiNo: string;
-  tel: string;
-  tel2: string;
-  ePosta: string;
-  adres: string;
-  aracPlaka: string;
-  meslek: string;
-  ogrenimDurumu: OgrenimDurumu;
-  dil: Dil;
+  tcKimlikVergiNo?: string;
+  tel?: string;
+  tel2?: string;
+  ePosta?: string;
+  adres?: string;
+  aracPlaka?: string;
+  meslek?: string;
+  ogrenimDurumu?: OgrenimDurumu;
+  dil?: Dil;
   cinsiyet: Cinsiyet;
   //#endregion
 

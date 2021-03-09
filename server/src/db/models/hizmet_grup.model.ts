@@ -1,5 +1,6 @@
 import BaseModel from '../../db/BaseModel';
 import Hizmet from './hizmet.model';
+import Site from './site.model';
 
 /**
  * HizmetGrup model
@@ -11,13 +12,15 @@ export default class HizmetGrup extends BaseModel {
 
   //#region Fields
   grupAdi: string;
+  siteId: number;
   //#endregion
 
   //#region Navigational properties
   /**
    * Hizmet grubuna ait hizmetler
    */
-  hizmetler: Hizmet[];
+  hizmetler?: Hizmet[];
+  site: Site;
   //#endregion
 
   static tableName = 'hizmet_grup';
@@ -28,10 +31,11 @@ export default class HizmetGrup extends BaseModel {
 
   static jsonSchema = {
     type: 'object',
-    required: ['id', 'grupAdi'],
+    required: ['id', 'grupAdi', 'siteId'],
 
     properties: {
       id: { type: 'integer' },
+      siteId: { type: 'integer' },
       grupAdi: { type: 'string', minLenght: 1, maxLenght: 255 },
     },
   };
@@ -41,6 +45,15 @@ export default class HizmetGrup extends BaseModel {
   /* -------------------------------------------------------------------------- */
 
   static relationMappings = () => ({
+    site: {
+      relation: BaseModel.BelongsToOneRelation,
+
+      modelClass: Site,
+      join: {
+        from: 'hizmet_grup.siteId',
+        to: 'site.id',
+      },
+    },
     hizmetler: {
       relation: BaseModel.HasManyRelation,
 

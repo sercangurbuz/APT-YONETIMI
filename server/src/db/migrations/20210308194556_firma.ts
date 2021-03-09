@@ -6,10 +6,11 @@ export async function up(knex: Knex): Promise<void> {
     table.increments('id').primary();
     table.string('ad', 255).notNullable();
     table.string('verNoTcKimlik', 11);
+    table.integer('siteId').notNullable().references("id").inTable("site");
     table.string('verDairesi', 255);
     table.string('isTel', 25);
     table.string('cepTel', 25);
-    table.string('iban', 35);
+    table.string('iban', 26);
     table.string('hesapAd', 255);
     table.string('ePosta', 255);
     table.string('adres', 500);
