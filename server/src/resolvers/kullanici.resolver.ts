@@ -1,22 +1,25 @@
 import Kullanici from '../db/models/kullanici.model';
 import { Resolvers } from '../type';
+import { PartialModelObject } from 'objection';
 
 export const kullaniciResolver: Resolvers = {
   Query: {
-    async kullanicilar(_, {}, {}, { fieldName }) {
+    async kulllar() {
       const result = await Kullanici.query();
       return result;
     },
 
-    async kullaniciById(_, { id }) {
+    async kullById(_, { id }) {
       const result = await Kullanici.query().findById(id);
       return result;
     },
   },
 
   Mutation: {
-    async saveKullanici(_, { payload }) {
-      const result = await Kullanici.query().insert(payload).returning('*');
+    async saveKull(_, { payload }) {
+      const result = await Kullanici.query()
+        .insert(payload as PartialModelObject<Kullanici>)
+        .returning('*');
       return result;
     },
   },

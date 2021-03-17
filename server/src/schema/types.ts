@@ -21,12 +21,6 @@ export const linkSchema = gql`
     pageSize: Int!
   }
 
-  "Supported ui cultures (en,tr)"
-  enum DilEnum {
-    TR
-    EN
-  }
-
   enum SignalType {
     ADDED
     DELETED

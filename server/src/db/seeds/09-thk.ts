@@ -48,20 +48,3 @@ export async function seed(knex: Knex): Promise<void> {
       return knex.insert(rows).into(tblName); //Insert new rows
     });
 }
-
-/*
-  kisiId: number;
-  bbolumId: number;
-  aciklama?: string;
-  hizmetId: number;
-  tarih: Date;
-  sonOdeTar: Date;
-  tutar: number;
-  odenen: number;
-  //Gecikme -----------------
-  gecikme?: boolean;
-  gecBasTar?: Date;
-  gecYuzde?: number;
-  gecTipi?: GecikmeTipi;
-  gecHesapTar?: Date;
-  makbuz?: boolean; */

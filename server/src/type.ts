@@ -3,13 +3,8 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql';
-import {
-  KullaniciMapper,
-  SiteMapper,
-  BBolumMapper,
-  SiteBlokMapper,
-} from './@types/mappers';
-import { GQLContext } from './src/@types/context';
+import { KullaniciMapper, SiteMapper, BBolumMapper } from './@types/mappers';
+import { GQLContext } from './@types/context';
 export type Maybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -18,6 +13,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
   { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
 } &
@@ -38,8 +34,11 @@ export type Query = {
   __typename?: 'Query';
   _: Scalars['Boolean'];
   bbolumById?: Maybe<BBolum>;
-  kullaniciById?: Maybe<Kullanici>;
-  kullanicilar?: Maybe<Array<Maybe<Kullanici>>>;
+  bbolumler?: Maybe<Array<Maybe<BBolum>>>;
+  kisiById?: Maybe<Kisi>;
+  kisiler?: Maybe<Array<Maybe<Kisi>>>;
+  kullById?: Maybe<Kullanici>;
+  kulllar?: Maybe<Array<Maybe<Kullanici>>>;
   siteById?: Maybe<Site>;
   siteler?: Maybe<Array<Maybe<Site>>>;
 };
@@ -48,7 +47,11 @@ export type QueryBbolumByIdArgs = {
   bbolumId: Scalars['Int'];
 };
 
-export type QueryKullaniciByIdArgs = {
+export type QueryKisiByIdArgs = {
+  id: Scalars['Int'];
+};
+
+export type QueryKullByIdArgs = {
   id: Scalars['Int'];
 };
 
@@ -60,7 +63,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   _: Scalars['Boolean'];
   saveBBolum?: Maybe<BBolum>;
-  saveKullanici?: Maybe<Kullanici>;
+  saveKisi?: Maybe<Kisi>;
+  saveKull?: Maybe<Kullanici>;
   saveSite?: Maybe<Site>;
 };
 
@@ -68,8 +72,12 @@ export type MutationSaveBBolumArgs = {
   payload: BBolumPayload;
 };
 
-export type MutationSaveKullaniciArgs = {
-  payload: KullaniciPayload;
+export type MutationSaveKisiArgs = {
+  payload: KisiPayload;
+};
+
+export type MutationSaveKullArgs = {
+  payload: KullPayload;
 };
 
 export type MutationSaveSiteArgs = {
@@ -123,6 +131,24 @@ export type BBolumPayload = {
   arsaPayi?: Maybe<Scalars['Float']>;
 };
 
+/** Bagımsız bolum tip */
+export type BBolumTip = {
+  __typename?: 'BBolumTip';
+  ad: Scalars['String'];
+  aidat?: Maybe<Scalars['Float']>;
+};
+
+/** Bagimsiz bolum & kişi ilişki modeli */
+export type KisiBolum = {
+  __typename?: 'KisiBolum';
+  id: Scalars['Int'];
+  adSoyad: Scalars['String'];
+  kisiTipi?: Maybe<Scalars['String']>;
+  girisTarihi?: Maybe<Scalars['Date']>;
+  cikisTarihi?: Maybe<Scalars['Date']>;
+  hissePayi?: Maybe<Scalars['Int']>;
+};
+
 /** Bağımsız bölüm */
 export type BBolum = {
   __typename?: 'BBolum';
@@ -130,20 +156,65 @@ export type BBolum = {
   siteId: Scalars['Int'];
   blokId?: Maybe<Scalars['Int']>;
   kat?: Maybe<Scalars['Int']>;
-  no: Scalars['Int'];
+  no?: Maybe<Scalars['Int']>;
   aidat?: Maybe<Scalars['Float']>;
   tipId?: Maybe<Scalars['Int']>;
-  grupId?: Maybe<Scalars['Int']>;
   brutM2?: Maybe<Scalars['Float']>;
   netM2?: Maybe<Scalars['Float']>;
   arsaPayi?: Maybe<Scalars['Float']>;
   /** Bagimsiz bolumun ait oldugu site */
   site?: Maybe<Site>;
   /** Bagimsiz bolumun ait oldugu blok */
-  blok?: Maybe<SiteBlok>;
+  blok?: Maybe<Blok>;
+  /** Bagimsiz bolum tip */
+  tip?: Maybe<BBolumTip>;
+  /** Daire sahibi */
+  malik?: Maybe<Kisi>;
+  /** Dairenin eski sahipleri */
+  eskiMalikler?: Maybe<Array<Maybe<KisiBolum>>>;
+  /** Kiracı */
+  kiraci?: Maybe<Kisi>;
+  /** Eski kiracılar */
+  eskiKiracilar?: Maybe<Array<Maybe<KisiBolum>>>;
 };
 
-export type KullaniciPayload = {
+export type KisiPayload = {
+  id?: Maybe<Scalars['Int']>;
+  adSoyad: Scalars['String'];
+  siteId: Scalars['Int'];
+  tcKimlikVergiNo?: Maybe<Scalars['String']>;
+  tel?: Maybe<Scalars['String']>;
+  tel2?: Maybe<Scalars['String']>;
+  ePosta?: Maybe<Scalars['String']>;
+  adres?: Maybe<Scalars['String']>;
+  aracPlaka?: Maybe<Scalars['String']>;
+  meslek?: Maybe<Scalars['String']>;
+  ogrenimDurumu?: Maybe<Scalars['Int']>;
+  dil?: Maybe<Scalars['String']>;
+  cinsiyet?: Maybe<Scalars['String']>;
+};
+
+/** Kullanıcı type */
+export type Kisi = {
+  __typename?: 'Kisi';
+  id: Scalars['Int'];
+  adSoyad: Scalars['String'];
+  siteId: Scalars['Int'];
+  tcKimlikVergiNo?: Maybe<Scalars['String']>;
+  tel?: Maybe<Scalars['String']>;
+  tel2?: Maybe<Scalars['String']>;
+  ePosta?: Maybe<Scalars['String']>;
+  adres?: Maybe<Scalars['String']>;
+  aracPlaka?: Maybe<Scalars['String']>;
+  meslek?: Maybe<Scalars['String']>;
+  ogrenimDurumu?: Maybe<Scalars['Int']>;
+  dil?: Maybe<Scalars['String']>;
+  cinsiyet?: Maybe<Scalars['String']>;
+  site?: Maybe<Site>;
+  bbolumler?: Maybe<Array<Maybe<BBolum>>>;
+};
+
+export type KullPayload = {
   id?: Maybe<Scalars['Int']>;
   adSoyad: Scalars['String'];
   cepTel: Scalars['String'];
@@ -160,7 +231,7 @@ export type Kullanici = {
   dil?: Maybe<DilEnum>;
   ePosta?: Maybe<Scalars['String']>;
   /** Kullanıcıya ait site ler */
-  siteler: Array<Site>;
+  siteler?: Maybe<Array<Maybe<Site>>>;
 };
 
 export type SitePayload = {
@@ -197,21 +268,16 @@ export type Site = {
   /** Siteyi açan kullanıcı */
   kullanici?: Maybe<Kullanici>;
   /** Siteye ait bloklar */
-  bloklar: Array<SiteBlok>;
+  bloklar?: Maybe<Array<Maybe<Blok>>>;
   /** Siteye ait bagimsiz bolumler */
-  bbolumler: Array<BBolum>;
+  bbolumler?: Maybe<Array<Maybe<BBolum>>>;
 };
 
 /** Site bloklari */
-export type SiteBlok = {
-  __typename?: 'SiteBlok';
+export type Blok = {
+  __typename?: 'Blok';
   id: Scalars['Int'];
-  siteId: Scalars['Int'];
   blokAdi: Scalars['String'];
-  /** Ait oldugu site modeli */
-  site?: Maybe<Site>;
-  /** Blok a ait bagimsiz bolumler */
-  bbolumler: Array<BBolum>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -348,12 +414,21 @@ export type ResolversTypes = ResolversObject<{
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   BBolumPayload: BBolumPayload;
   Float: ResolverTypeWrapper<Scalars['Float']>;
+  BBolumTip: ResolverTypeWrapper<BBolumTip>;
+  KisiBolum: ResolverTypeWrapper<KisiBolum>;
   BBolum: ResolverTypeWrapper<BBolumMapper>;
-  KullaniciPayload: KullaniciPayload;
+  KisiPayload: KisiPayload;
+  Kisi: ResolverTypeWrapper<
+    Omit<Kisi, 'site' | 'bbolumler'> & {
+      site?: Maybe<ResolversTypes['Site']>;
+      bbolumler?: Maybe<Array<Maybe<ResolversTypes['BBolum']>>>;
+    }
+  >;
+  KullPayload: KullPayload;
   Kullanici: ResolverTypeWrapper<KullaniciMapper>;
   SitePayload: SitePayload;
   Site: ResolverTypeWrapper<SiteMapper>;
-  SiteBlok: ResolverTypeWrapper<SiteBlokMapper>;
+  Blok: ResolverTypeWrapper<Blok>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -371,12 +446,19 @@ export type ResolversParentTypes = ResolversObject<{
   Upload: Scalars['Upload'];
   BBolumPayload: BBolumPayload;
   Float: Scalars['Float'];
+  BBolumTip: BBolumTip;
+  KisiBolum: KisiBolum;
   BBolum: BBolumMapper;
-  KullaniciPayload: KullaniciPayload;
+  KisiPayload: KisiPayload;
+  Kisi: Omit<Kisi, 'site' | 'bbolumler'> & {
+    site?: Maybe<ResolversParentTypes['Site']>;
+    bbolumler?: Maybe<Array<Maybe<ResolversParentTypes['BBolum']>>>;
+  };
+  KullPayload: KullPayload;
   Kullanici: KullaniciMapper;
   SitePayload: SitePayload;
   Site: SiteMapper;
-  SiteBlok: SiteBlokMapper;
+  Blok: Blok;
 }>;
 
 export interface DateScalarConfig
@@ -395,13 +477,29 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryBbolumByIdArgs, 'bbolumId'>
   >;
-  kullaniciById?: Resolver<
+  bbolumler?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['BBolum']>>>,
+    ParentType,
+    ContextType
+  >;
+  kisiById?: Resolver<
+    Maybe<ResolversTypes['Kisi']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryKisiByIdArgs, 'id'>
+  >;
+  kisiler?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Kisi']>>>,
+    ParentType,
+    ContextType
+  >;
+  kullById?: Resolver<
     Maybe<ResolversTypes['Kullanici']>,
     ParentType,
     ContextType,
-    RequireFields<QueryKullaniciByIdArgs, 'id'>
+    RequireFields<QueryKullByIdArgs, 'id'>
   >;
-  kullanicilar?: Resolver<
+  kulllar?: Resolver<
     Maybe<Array<Maybe<ResolversTypes['Kullanici']>>>,
     ParentType,
     ContextType
@@ -430,11 +528,17 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationSaveBBolumArgs, 'payload'>
   >;
-  saveKullanici?: Resolver<
+  saveKisi?: Resolver<
+    Maybe<ResolversTypes['Kisi']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSaveKisiArgs, 'payload'>
+  >;
+  saveKull?: Resolver<
     Maybe<ResolversTypes['Kullanici']>,
     ParentType,
     ContextType,
-    RequireFields<MutationSaveKullaniciArgs, 'payload'>
+    RequireFields<MutationSaveKullArgs, 'payload'>
   >;
   saveSite?: Resolver<
     Maybe<ResolversTypes['Site']>,
@@ -488,6 +592,36 @@ export interface UploadScalarConfig
   name: 'Upload';
 }
 
+export type BBolumTipResolvers<
+  ContextType = GQLContext,
+  ParentType extends ResolversParentTypes['BBolumTip'] = ResolversParentTypes['BBolumTip']
+> = ResolversObject<{
+  ad?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  aidat?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type KisiBolumResolvers<
+  ContextType = GQLContext,
+  ParentType extends ResolversParentTypes['KisiBolum'] = ResolversParentTypes['KisiBolum']
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  adSoyad?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  kisiTipi?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  girisTarihi?: Resolver<
+    Maybe<ResolversTypes['Date']>,
+    ParentType,
+    ContextType
+  >;
+  cikisTarihi?: Resolver<
+    Maybe<ResolversTypes['Date']>,
+    ParentType,
+    ContextType
+  >;
+  hissePayi?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type BBolumResolvers<
   ContextType = GQLContext,
   ParentType extends ResolversParentTypes['BBolum'] = ResolversParentTypes['BBolum']
@@ -496,15 +630,65 @@ export type BBolumResolvers<
   siteId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   blokId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   kat?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  no?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  no?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   aidat?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   tipId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  grupId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   brutM2?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   netM2?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   arsaPayi?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   site?: Resolver<Maybe<ResolversTypes['Site']>, ParentType, ContextType>;
-  blok?: Resolver<Maybe<ResolversTypes['SiteBlok']>, ParentType, ContextType>;
+  blok?: Resolver<Maybe<ResolversTypes['Blok']>, ParentType, ContextType>;
+  tip?: Resolver<Maybe<ResolversTypes['BBolumTip']>, ParentType, ContextType>;
+  malik?: Resolver<Maybe<ResolversTypes['Kisi']>, ParentType, ContextType>;
+  eskiMalikler?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['KisiBolum']>>>,
+    ParentType,
+    ContextType
+  >;
+  kiraci?: Resolver<Maybe<ResolversTypes['Kisi']>, ParentType, ContextType>;
+  eskiKiracilar?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['KisiBolum']>>>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type KisiResolvers<
+  ContextType = GQLContext,
+  ParentType extends ResolversParentTypes['Kisi'] = ResolversParentTypes['Kisi']
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  adSoyad?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  siteId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  tcKimlikVergiNo?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  tel?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tel2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ePosta?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  adres?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  aracPlaka?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >;
+  meslek?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ogrenimDurumu?: Resolver<
+    Maybe<ResolversTypes['Int']>,
+    ParentType,
+    ContextType
+  >;
+  dil?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  cinsiyet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  site?: Resolver<Maybe<ResolversTypes['Site']>, ParentType, ContextType>;
+  bbolumler?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['BBolum']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -517,7 +701,11 @@ export type KullaniciResolvers<
   cepTel?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   dil?: Resolver<Maybe<ResolversTypes['DilEnum']>, ParentType, ContextType>;
   ePosta?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  siteler?: Resolver<Array<ResolversTypes['Site']>, ParentType, ContextType>;
+  siteler?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes['Site']>>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -553,31 +741,24 @@ export type SiteResolvers<
     ContextType
   >;
   bloklar?: Resolver<
-    Array<ResolversTypes['SiteBlok']>,
+    Maybe<Array<Maybe<ResolversTypes['Blok']>>>,
     ParentType,
     ContextType
   >;
   bbolumler?: Resolver<
-    Array<ResolversTypes['BBolum']>,
+    Maybe<Array<Maybe<ResolversTypes['BBolum']>>>,
     ParentType,
     ContextType
   >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SiteBlokResolvers<
+export type BlokResolvers<
   ContextType = GQLContext,
-  ParentType extends ResolversParentTypes['SiteBlok'] = ResolversParentTypes['SiteBlok']
+  ParentType extends ResolversParentTypes['Blok'] = ResolversParentTypes['Blok']
 > = ResolversObject<{
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  siteId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   blokAdi?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  site?: Resolver<Maybe<ResolversTypes['Site']>, ParentType, ContextType>;
-  bbolumler?: Resolver<
-    Array<ResolversTypes['BBolum']>,
-    ParentType,
-    ContextType
-  >;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -590,10 +771,13 @@ export type Resolvers<ContextType = GQLContext> = ResolversObject<{
   Signal?: SignalResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   Upload?: GraphQLScalarType;
+  BBolumTip?: BBolumTipResolvers<ContextType>;
+  KisiBolum?: KisiBolumResolvers<ContextType>;
   BBolum?: BBolumResolvers<ContextType>;
+  Kisi?: KisiResolvers<ContextType>;
   Kullanici?: KullaniciResolvers<ContextType>;
   Site?: SiteResolvers<ContextType>;
-  SiteBlok?: SiteBlokResolvers<ContextType>;
+  Blok?: BlokResolvers<ContextType>;
 }>;
 
 /**

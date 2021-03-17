@@ -18,7 +18,7 @@ export default class BBolum extends BaseModel {
   siteId: number;
   blokId: number;
   kat: number;
-  no: string;
+  no: number;
   aidat?: number;
   tipId?: number;
   brutM2?: number;

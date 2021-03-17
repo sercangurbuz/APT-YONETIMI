@@ -1,3 +1,4 @@
+import { PartialModelObject } from 'objection';
 import BBolum from '../db/models/bbolum.model';
 import Kullanici from '../db/models/kullanici.model';
 import Site from '../db/models/site.model';
@@ -6,6 +7,11 @@ import { Resolvers } from '../type';
 
 export const bbolumResolver: Resolvers = {
   Query: {
+    async bbolumler() {
+      const result = await BBolum.query();
+      return result;
+    },
+
     async bbolumById(_, { bbolumId }) {
       const result = await BBolum.query().findById(bbolumId);
       return result;

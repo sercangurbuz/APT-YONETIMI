@@ -6,9 +6,9 @@ export default gql`
     id: Int!
     adSoyad: String!
     cepTel: String!
-    dil: DilEnum
+    dil: String
     ePosta: String
     "Kullanıcıya ait site ler"
-    siteler: [Site!]!
+    siteler: [Site]
   }
 `;

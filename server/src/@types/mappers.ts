@@ -12,5 +12,5 @@ export type Mapper<T extends Model> = Pick<
 // Types to use in Codegen mappers
 export type KullaniciMapper = Mapper<Kullanici>;
 export type SiteMapper = Mapper<Site>;
-export type SiteBlokMapper = Mapper<SiteBlok>;
+export type BlokMapper = Mapper<SiteBlok>;
 export type BBolumMapper = Mapper<BBolum>;

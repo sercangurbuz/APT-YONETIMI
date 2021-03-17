@@ -22,7 +22,7 @@ export async function up(knex: Knex): Promise<void> {
         .inTable('site_blok')
         .onDelete('SET NULL');
       table.specificType('kat', 'smallint');
-      table.string('no',3);
+      table.integer('no',3);
       table.decimal('aidat', 10, 2);
       table
         .integer('tipId')

@@ -1,62 +1,51 @@
-/* eslint-disable no-console */
-import 'reflect-metadata';
-import { ApolloServer } from 'apollo-server-express';
 import cors from 'cors';
-import http from 'http';
 import dotenv from 'dotenv';
 import express from 'express';
-import { PubSub } from 'apollo-server';
-import path from 'path';
-
-import typeDefs from './schema';
-import resolvers from './resolvers';
-
-export const pubsub = new PubSub();
+import createApolloServer from './apollo';
+import initKnex from './db/init';
 
 dotenv.config();
 
-const { PORT, CLIENT_HOST } = process.env;
+const { PORT, CLIENT_HOST, NODE_ENV } = process.env;
+const isDev = NODE_ENV !== 'production';
 
-const startServer = async () => {
-  //await createConnection();
-
+const startServer = () => {
   const app = express();
-  // serve images
-  app.use('/imgs', express.static('uploads'));
 
+  /* -------------------------------------------------------------------------- */
+  /*                                 Middlewares                                */
+  /* -------------------------------------------------------------------------- */
+
+  app.use('/imgs', express.static('uploads'));
   app.use(
     cors({
       credentials: true,
       origin: CLIENT_HOST,
-    })
+    }),
   );
 
-  const server = new ApolloServer({
-    introspection: true,
-    playground: true,
-    tracing: true,
-    typeDefs,
-    resolvers,
-    uploads: {
-      maxFileSize: 10000000, // 10 MB
-      maxFiles: 20,
-    },
-    context() {
-      return {};
-    },
-  });
+  /* -------------------------------------------------------------------------- */
+  /*                  initialize knex instance depending on env                 */
+  /* -------------------------------------------------------------------------- */
 
-  server.applyMiddleware({ app });
+  initKnex({ isDev });
 
-  const httpServer = http.createServer(app);
-  server.installSubscriptionHandlers(httpServer);
+  /* -------------------------------------------------------------------------- */
+  /*                   Create apollo instance with express app                  */
+  /* -------------------------------------------------------------------------- */
+
+  const { httpServer, apolloServer } = createApolloServer({ app, isDev });
 
   httpServer.listen(PORT, () => {
-    console.log(`🚀 Server ready at ${server.graphqlPath}`);
+    console.log(`🚀 Server ready at ${apolloServer.graphqlPath}`);
     console.log(
-      `🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
+      `🚀 Subscriptions ready at ws://localhost:${PORT}${apolloServer.subscriptionsPath}`,
     );
   });
 };
+
+/* -------------------------------------------------------------------------- */
+/*                                    START                                   */
+/* -------------------------------------------------------------------------- */
 
 startServer();

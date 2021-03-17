@@ -2,14 +2,14 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
   extend type Mutation {
-    saveKullanici(payload: KullaniciPayload!): Kullanici
+    saveKull(payload: KullPayload!): Kullanici
   }
 
-  input KullaniciPayload {
+  input KullPayload {
     id: Int
     adSoyad: String!
     cepTel: String!
-    dil: DilEnum
+    dil: String
     ePosta: String
   }
 `;

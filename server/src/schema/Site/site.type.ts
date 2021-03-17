@@ -20,19 +20,14 @@ export default gql`
     "Siteyi açan kullanıcı"
     kullanici: Kullanici
     "Siteye ait bloklar"
-    bloklar: [SiteBlok!]!  
+    bloklar: [Blok]
     "Siteye ait bagimsiz bolumler"
-    bbolumler: [BBolum!]!
+    bbolumler: [BBolum]
   }
-  
+
   "Site bloklari"
-  type SiteBlok {
+  type Blok {
     id: Int!
-    siteId: Int!
     blokAdi: String!
-    "Ait oldugu site modeli"
-    site: Site
-    "Blok a ait bagimsiz bolumler"
-    bbolumler: [BBolum!]!
   }
 `;
